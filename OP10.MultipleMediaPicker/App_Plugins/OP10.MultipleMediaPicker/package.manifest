@@ -1,0 +1,46 @@
+{
+	"propertyEditors": [{ 
+		"alias": "OP10.MultipleMediaPicker",
+		"name":  "OP10 Multiple Media Picker",
+		"editor": {
+			"view": "~/App_Plugins/OP10.MultipleMediaPicker/multipleMediaPicker.html?v=ASSEMBLY_VERSION",
+			"valueType": "JSON"
+		},
+		"prevalues": {
+			"fields": [
+				{
+					"label": "Pick multiple items",
+					"description": "",
+					"key": "multiPicker",
+					"view": "boolean"
+				},
+				{
+					"label": "Start node",
+					"description": "",
+					"key": "startNodeId",
+					"view": "mediapicker"
+				},
+				{
+					"label": "Select Properties",
+					"description": "Select properties that can be edited in the dialog",
+					"key": "selectedProperties",
+					"view": "~/App_Plugins/OP10.MultipleMediaPicker/prevalueEditors/multipleMediaPickerSelectProperties.html?v=ASSEMBLY_VERSION"
+				},
+				{
+					"label": "Select quickview Properties",
+					"description": "Select properties that can be edited directly on the overview",
+					"key": "selectedQuickviewProperties",
+					"view": "~/App_Plugins/OP10.MultipleMediaPicker/prevalueEditors/multipleMediaPickerSelectProperties.html?v=ASSEMBLY_VERSION"
+				}
+			]
+		}
+	}],
+	"css": [
+		"~/App_Plugins/OP10.MultipleMediaPicker/css/multipleMediaPicker.css?v=ASSEMBLY_VERSION"
+	],
+	"javascript": [
+		"~/App_Plugins/OP10.MultipleMediaPicker/op10.multipleMediaPicker.controller.js?v=ASSEMBLY_VERSION",
+		"~/App_Plugins/OP10.MultipleMediaPicker/op10.multipleMediaPicker.resource.js?v=ASSEMBLY_VERSION",
+		"~/App_Plugins/OP10.MultipleMediaPicker/prevalueEditors/op10.multipleMediaPickerSelectProperties.controller.js?v=ASSEMBLY_VERSION"
+	]
+}

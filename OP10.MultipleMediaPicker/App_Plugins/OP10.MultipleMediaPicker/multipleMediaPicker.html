@@ -1,0 +1,71 @@
+<div class="multipleMediaPicker umb-editor umb-mediapicker" ng-controller="OP10.Backoffice.MultipleMediaPicker.Controller">
+
+	<ul class="umb-sortable-thumbnails" ng-show="isLoading">
+		<li class="media-loader">
+			<div class="sk-circle1 sk-circle"></div>
+			<div class="sk-circle2 sk-circle"></div>
+			<div class="sk-circle3 sk-circle"></div>
+			<div class="sk-circle4 sk-circle"></div>
+			<div class="sk-circle5 sk-circle"></div>
+			<div class="sk-circle6 sk-circle"></div>
+			<div class="sk-circle7 sk-circle"></div>
+			<div class="sk-circle8 sk-circle"></div>
+			<div class="sk-circle9 sk-circle"></div>
+			<div class="sk-circle10 sk-circle"></div>
+			<div class="sk-circle11 sk-circle"></div>
+			<div class="sk-circle12 sk-circle"></div>
+		</li>
+	</ul>
+
+	<ul ui-sortable="sortableOptions" ng-model="images" class="umb-sortable-thumbnails">
+
+		<li style="width: 260px;" ng-repeat="image in images">
+
+			<div class="quickview" ng-if="hasQuickviewProperties">
+				<div class="quickview-item" ng-class="{ focus : image.name != ''}" ng-if="changeNameInQuickview">
+					<umb-control-group label="Name">
+						<input type="text" name="name" value="{{image.name}}" ng-model="image.name" required />
+					</umb-control-group>
+				</div>
+				<div class="quickview-item" ng-class="{ focus : image.physicalName != ''}" ng-if="changePhysicalNameInQuickview">
+					<umb-control-group label="Physical name (without ending)">
+						<input type="text" name="physicalName" value="{{image.physicalName}}" ng-model="image.physicalName" ng-pattern='/^[^\\/:*?"<>|\n\t\r]*$/' required />
+					</umb-control-group>
+				</div>
+				<div class="quickview-item" ng-repeat="property in image.quickviewProperties" ng-class="{ focus : property.value != ''}">
+					<umb-control-group label="{{property.label}}">
+						<input type="text" name="{{property.alias}}" value="{{property.value}}" ng-model="property.value" ng-required="property.validation.mandatory" />
+					</umb-control-group>
+				</div>
+			</div>
+
+			<div class="media-container">
+				<a href title="Rename Media" ng-click="rename($index)">
+					<img ng-src="{{image.thumbnail}}" alt="{{image.name}}" ng-show="image.thumbnail">
+				</a>
+
+				<span class="icon-holder" ng-hide="image.thumbnail">
+					<i class="icon {{image.icon}} large"></i>
+					<small>{{image.name}}</small>
+				</span>
+
+				<div class="image-name">
+					<small>{{image.name}}</small>
+				</div>
+
+				<a href title="Rename Media" class="picked-image media-image" ng-click="rename($index)"><i class="icon icon-settings"></i></a>
+				<a href title="Remove link to Media" class="picked-image" ng-click="remove($index)"><i class="icon icon-delete"></i></a>
+			</div>
+
+		</li>
+	</ul>
+
+	<ul class="umb-sortable-thumbnails" ng-if="showAdd()">
+		<li style="border: none">
+			<a href="#" class="add-link" ng-click="add()" prevent-default>
+				<i class="icon icon-add large"></i>
+			</a>
+		</li>
+	</ul>
+
+</div>

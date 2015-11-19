@@ -1,0 +1,38 @@
+<div ng-controller="OP10.Backoffice.MultipleMediaPickerDialog.Controller">
+	<form name="multipleMediaPicker" ng-submit="submit(model)" class="multipleMediaPicker">
+		<umb-panel>
+			<div class="umb-panel-header">
+				<h1 class="headline">Rename Media</h1>
+			</div>
+			<div class="umb-panel-body umb-scrollable with-header with-footer">
+				<umb-pane>
+					<umb-control-group label="Name" ng-if="model.changeDefaultName">
+						<input type="text" name="name" ng-model="model.name" value="model.name" required />
+					</umb-control-group>
+					<umb-control-group label="Physical name (without ending)" ng-if="model.changePhysicalName">
+						<input type="text" name="physicalName" ng-model="model.physicalName" value="model.physicalName" ng-pattern='/^[^\\/:*?"<>|\n\t\r]*$/' required />
+					</umb-control-group>
+					<div ng-repeat="property in model.properties">
+						<umb-control-group label="{{property.label}}">
+							<input type="text" name="{{property.alias}}" value="{{property.value}}" ng-model="property.value" ng-required="property.validation.mandatory" />
+							<span class="help-block" ng-show="multipleMediaPicker[{{property.alias}}].$error.required">Required</span>
+						</umb-control-group>
+					</div>
+					<p>
+						Location: <a href="#media/media/edit/{{model.id}}" title="Edit in Media" ng-click="close()">{{model.path}}</a>
+					</p>
+				</umb-pane>
+			</div>
+			<div class="umb-panel-footer">
+				<div class="btn-toolbar umb-btn-toolbar pull-right">
+					<a class="btn btn-link" ng-click="close()">
+						<localize key="cancel">Cancel</localize>
+					</a>
+					<button type="submit" class="btn btn-primary" ng-disabled="!multipleMediaPicker.$valid">
+						<localize key="buttons_save">Save</localize>
+					</button>
+				</div>
+			</div>
+		</umb-panel>
+	</form>
+</div>

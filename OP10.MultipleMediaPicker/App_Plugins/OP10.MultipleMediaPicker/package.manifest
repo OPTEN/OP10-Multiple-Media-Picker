@@ -27,8 +27,8 @@
 					"view": "~/App_Plugins/OP10.MultipleMediaPicker/prevalueEditors/multipleMediaPickerSelectProperties.html?v=ASSEMBLY_VERSION"
 				},
 				{
-					"label": "Select quickview Properties",
-					"description": "Select properties that can be edited directly on the overview",
+					"label": "Select quick-view Properties",
+					"description": "Select properties that can be edited directly in the overview",
 					"key": "selectedQuickviewProperties",
 					"view": "~/App_Plugins/OP10.MultipleMediaPicker/prevalueEditors/multipleMediaPickerSelectProperties.html?v=ASSEMBLY_VERSION"
 				}

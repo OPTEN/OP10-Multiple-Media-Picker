@@ -28,7 +28,7 @@
 					</umb-control-group>
 				</div>
 				<div class="quickview-item" ng-class="{ focus : image.physicalName != ''}" ng-if="changePhysicalNameInQuickview">
-					<umb-control-group label="Physical name (without ending)">
+					<umb-control-group label="Physical name (without file extension)">
 						<input type="text" name="physicalName" value="{{image.physicalName}}" ng-model="image.physicalName" ng-pattern='/^[^\\/:*?"<>|\n\t\r]*$/' required />
 					</umb-control-group>
 				</div>
@@ -40,7 +40,7 @@
 			</div>
 
 			<div class="media-container">
-				<a href title="Rename Media" ng-click="rename($index)">
+				<a href title="Rename media" ng-click="rename($index)">
 					<img ng-src="{{image.thumbnail}}" alt="{{image.name}}" ng-show="image.thumbnail">
 				</a>
 
@@ -53,8 +53,8 @@
 					<small>{{image.name}}</small>
 				</div>
 
-				<a href title="Rename Media" class="picked-image media-image" ng-click="rename($index)"><i class="icon icon-settings"></i></a>
-				<a href title="Remove link to Media" class="picked-image" ng-click="remove($index)"><i class="icon icon-delete"></i></a>
+				<a href title="Rename media" class="picked-image media-image" ng-click="rename($index)"><i class="icon icon-settings"></i></a>
+				<a href title="Remove link to media" class="picked-image" ng-click="remove($index)"><i class="icon icon-delete"></i></a>
 			</div>
 
 		</li>

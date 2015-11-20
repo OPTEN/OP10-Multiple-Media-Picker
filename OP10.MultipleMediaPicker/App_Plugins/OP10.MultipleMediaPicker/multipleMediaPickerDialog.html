@@ -2,14 +2,14 @@
 	<form name="multipleMediaPicker" ng-submit="submit(model)" class="multipleMediaPicker">
 		<umb-panel>
 			<div class="umb-panel-header">
-				<h1 class="headline">Rename Media</h1>
+				<h1 class="headline">Edit media</h1>
 			</div>
 			<div class="umb-panel-body umb-scrollable with-header with-footer">
 				<umb-pane>
 					<umb-control-group label="Name" ng-if="model.changeDefaultName">
 						<input type="text" name="name" ng-model="model.name" value="model.name" required />
 					</umb-control-group>
-					<umb-control-group label="Physical name (without ending)" ng-if="model.changePhysicalName">
+					<umb-control-group label="Physical name (without file extension)" ng-if="model.changePhysicalName">
 						<input type="text" name="physicalName" ng-model="model.physicalName" value="model.physicalName" ng-pattern='/^[^\\/:*?"<>|\n\t\r]*$/' required />
 					</umb-control-group>
 					<div ng-repeat="property in model.properties">

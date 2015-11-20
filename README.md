@@ -8,8 +8,7 @@ For SEO ranking you can also edit the **Physical Name** to change the media name
 If you want to use less clicks you can also enable the **quick-view** property which allows you to edit the data directly in the overview and not in the dialog.
 
 **The plugin supports also the Image Cropper!**
-
-
+<br /><br /><br />
 Visit our page: [OPTEN AG](http://www.opten.ch/)<br />
 Download the Umbraco Package here: [OP10 Multiple Media Picker](https://our.umbraco.org/projects/backoffice-extensions/op10-multiple-media-picker/)
 
@@ -21,3 +20,4 @@ Contributors:<br />
 -Severin d'Heureuse<br />
 -Calvin Frei<br />
 -Tobias Lopez<br />
+-Tim Pickin<br />

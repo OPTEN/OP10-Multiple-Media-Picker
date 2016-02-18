@@ -43,7 +43,14 @@ namespace OP10.MultipleMediaPicker.Controllers
 						}
 						System.IO.File.Move(oldFilePath, newFilePath);
 					}
-					newMedia.SetValue("umbracoFile", newFilePathRelative);
+					if (urlValue.DetectIsJson())
+					{
+						newMedia.SetValue("umbracoFile", urlValue.Replace(oldFilePathRelative, newFilePathRelative));
+					}
+					else
+					{
+						newMedia.SetValue("umbracoFile", newFilePathRelative);
+					}
 				}
 				if (!String.IsNullOrWhiteSpace(request.Name))
 				{

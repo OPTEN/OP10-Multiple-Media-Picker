@@ -8,8 +8,10 @@
 	function multipleMediaPickerController($scope, $q, umbPropEditorHelper, dialogService, entityResource, mediaResource, mediaHelper, multipleMediaPickerResource, notificationsService, $timeout) {
 
 		// get the content item form
-		$scope.contentForm = angular.element('form[name=contentForm]').scope().contentForm;
-
+	    var contentForm = angular.element('form[name=contentForm]').scope();
+	    if (contentForm != undefined) {
+	        $scope.contentForm = contentForm.contentForm;
+	    }
 		//check the pre-values for multi-picker
 		var multiPicker = $scope.model.config.multiPicker && $scope.model.config.multiPicker !== '0' ? true : false;
 

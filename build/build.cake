@@ -99,6 +99,26 @@ Task("Pack")
 				.WithProperty("ArtifactsDir", dest));
 });
 
+// Deploying
+
+Task("Deploy")
+	.Does(() =>
+{
+	string packageId = "OP10.MultipleMediaPicker";
+
+	// Get the Version from the .txt file
+	version = EnvironmentVariable("bamboo_inject_" + packageId.Replace(".", "_") + "_version");
+            
+	// Push the package
+	NuGetPush(package, new NuGetPushSettings {
+		Source = "https://www.nuget.org/api/v2/package",
+		ApiKey = EnvironmentVariable("NUGET_API_KEY")
+	});
+
+	// Notifications
+	Slack();
+});
+
 Task("Default")
 	.IsDependentOn("Pack");
 

@@ -108,7 +108,10 @@ Task("Deploy")
 
 	// Get the Version from the .txt file
 	version = EnvironmentVariable("bamboo_inject_" + packageId.Replace(".", "_") + "_version");
-            
+
+	// Get the path to the package
+	var package = File(packageId + "." + version + ".nupkg");             
+
 	// Push the package
 	NuGetPush(package, new NuGetPushSettings {
 		Source = "https://www.nuget.org/api/v2/package",

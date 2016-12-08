@@ -13,7 +13,7 @@ Visit our page: [OPTEN AG](http://www.opten.ch/)<br />
 Download the Umbraco Package here: [OP10 Multiple Media Picker](https://our.umbraco.org/projects/backoffice-extensions/op10-multiple-media-picker/)<br/>
 Install via NuGet:
 ```
-PM> Install-Package Install-Package OP10.MultipleMediaPicker
+PM> Install-Package OP10.MultipleMediaPicker
 ```
 
 Main Developer:<br />

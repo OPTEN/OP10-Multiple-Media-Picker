@@ -19,6 +19,7 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -287,7 +288,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Plugins\OP10.MultipleMediaPicker\propertyeditors\imagecropper.html" />
     <Content Include="App_Plugins\OP10.MultipleMediaPicker\package.manifest" />
+    <Content Include="gulpfile.js" />
     <Content Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -302,8 +305,8 @@
     <Content Include="App_Plugins\OP10.MultipleMediaPicker\multipleMediaPickerDialog.html" />
     <Content Include="App_Plugins\OP10.MultipleMediaPicker\op10.multipleMediaPicker.controller.js" />
     <Content Include="App_Plugins\OP10.MultipleMediaPicker\op10.multipleMediaPicker.resource.js" />
-    <Content Include="App_Plugins\OP10.MultipleMediaPicker\prevalueEditors\multipleMediaPickerSelectProperties.html" />
-    <Content Include="App_Plugins\OP10.MultipleMediaPicker\prevalueEditors\op10.multipleMediaPickerSelectProperties.controller.js" />
+    <Content Include="App_Plugins\OP10.MultipleMediaPicker\prevalueeditors\multipleMediaPickerSelectProperties.html" />
+    <Content Include="App_Plugins\OP10.MultipleMediaPicker\prevalueeditors\op10.multipleMediaPickerSelectProperties.controller.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>

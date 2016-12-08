@@ -8,21 +8,19 @@
 	function multipleMediaPickerResource($http, umbRequestHelper) {
 		var resource = {
 			saveMedia: saveMedia,
-			getMediaProperties: getMediaProperties
+			getMediaProperties: getMediaProperties,
+			getUmbracoVersion: getUmbracoVersion
 		};
 
 		return resource;
 
 		// Private functions
 
-		function saveMedia(id, name, properties, changePhysicalName, physicalName) {
+		function saveMedia(id, properties) {
 			return umbRequestHelper.resourcePromise(
                 $http.post("/umbraco/backoffice/OP10/MultipleMediaPickerApi/PostMedia", {
                 	id: id,
-                	name: name,
-                	properties: properties,
-                	changePhysicalName: changePhysicalName,
-                	physicalName: physicalName
+                	properties: properties
                 }),
                 "Media could not be saved!"
             );
@@ -34,6 +32,14 @@
                 "Could not get Media properties!"
             );
 		};
+
+		function getUmbracoVersion() {
+			return umbRequestHelper.resourcePromise(
+                $http.get("/umbraco/backoffice/OP10/MultipleMediaPickerApi/GetUmbracoVersion"),
+                "Could not get Umbraco Version!"
+            );
+		};
+
 	};
 
 }());

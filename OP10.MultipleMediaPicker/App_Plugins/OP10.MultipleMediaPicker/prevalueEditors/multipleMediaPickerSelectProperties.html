@@ -1,11 +1,16 @@
 ﻿<div class="multipleMediaPicker" ng-controller="OP10.Backoffice.MultipleMediaPickerSelectProperties.Controller">
-	<div ng-repeat="property in properties">
-		<div ng-if="property.alias == 'empty' || property.alias == 'loading'">
-			<p>{{property.name}}</p>
+	<div class="multipleMediaPicker-prevalue" ui-sortable="sortableOptions">
+		<div class="control-group" ng-repeat="property in properties">
+			<div ng-if="property.alias == 'empty' || property.alias == 'loading'">
+				<p>{{property.name}}</p>
+			</div>
+			<div ng-if="property.alias != 'empty' && property.alias != 'loading'">
+				<i class="icon icon-navigation handle"></i>
+				<label>
+					<input type="checkbox" value="{{property.alias}}" ng-click="toggle(property.alias)" ng-checked="checked.indexOf(property.alias) > -1" />
+					{{property.name}} <small>({{property.alias}})</small>
+				</label>
+			</div>
 		</div>
-		<label ng-if="property.alias != 'empty' && property.alias != 'loading'">
-			<input type="checkbox" value="{{property.alias}}" ng-click="toggle(property.alias)" ng-checked="checked.indexOf(property.alias) > -1" />
-			{{property.name}} <small>({{property.alias}})</small>
-			<label>
 	</div>
 </div>

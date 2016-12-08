@@ -19,42 +19,43 @@
 
 	<ul ui-sortable="sortableOptions" ng-model="images" class="umb-sortable-thumbnails">
 
-		<li style="width: 260px;" ng-repeat="image in images">
+		<li style="width: 260px;" ng-repeat="image in images | filter : '!!'">
 
-			<div class="quickview" ng-if="hasQuickviewProperties">
-				<div class="quickview-item" ng-class="{ focus : image.name != ''}" ng-if="changeNameInQuickview">
-					<umb-control-group label="Name">
-						<input type="text" name="name" value="{{image.name}}" ng-model="image.name" required />
-					</umb-control-group>
-				</div>
-				<div class="quickview-item" ng-class="{ focus : image.physicalName != ''}" ng-if="changePhysicalNameInQuickview">
-					<umb-control-group label="Physical name (without file extension)">
-						<input type="text" name="physicalName" value="{{image.physicalName}}" ng-model="image.physicalName" ng-pattern='/^[^\\/:*?"<>|\n\t\r]*$/' required />
-					</umb-control-group>
-				</div>
-				<div class="quickview-item" ng-repeat="property in image.quickviewProperties" ng-class="{ focus : property.value != ''}">
-					<umb-control-group label="{{property.label}}">
-						<input type="text" name="{{property.alias}}" value="{{property.value}}" ng-model="property.value" ng-required="property.validation.mandatory" />
-					</umb-control-group>
-				</div>
+			<div class="quickview" ng-if="image.quickviewProperties && image.hasPermission">
+				<umb-property ng-repeat="property in image.quickviewProperties" property="property" class="quickview-item quickview-item-{{property.view}}">
+					<umb-editor model="property"></umb-editor>
+				</umb-property>
 			</div>
 
-			<div class="media-container">
-				<a href title="Rename media" ng-click="rename($index)">
+			<div class="text-error" ng-if="!image.hasPermission">
+				<p><localize key="assignDomain_permissionDenied">Permission denied.</localize></p>
+			</div>
+
+			<div class="media-container" ng-class="{'folder-container': image.isFolder, 'file-container': image.isFile}" ng-if="!image.isImageCropper">
+				<a href title="@content_clickToEdit" ng-click="edit($index)" localize="title">
 					<img ng-src="{{image.thumbnail}}" alt="{{image.name}}" ng-show="image.thumbnail">
+
+					<span class="icon-holder" ng-hide="image.thumbnail">
+						<i class="icon {{image.icon}} large"></i>
+						<small>{{image.name}}</small>
+					</span>
 				</a>
 
-				<span class="icon-holder" ng-hide="image.thumbnail">
-					<i class="icon {{image.icon}} large"></i>
-					<small>{{image.name}}</small>
-				</span>
+				<a href title="@content_clickToEdit" class="picked-image media-image" ng-click="edit($index)" localize="title">
+					<i class="icon icon-settings"></i>
+				</a>
+				<a href title="@content_uploadClear" class="picked-image" ng-click="remove($index)" localize="title">
+					<i class="icon icon-delete"></i>
+				</a>
+			</div>
 
-				<div class="image-name">
-					<small>{{image.name}}</small>
-				</div>
-
-				<a href title="Rename media" class="picked-image media-image" ng-click="rename($index)"><i class="icon icon-settings"></i></a>
-				<a href title="Remove link to media" class="picked-image" ng-click="remove($index)"><i class="icon icon-delete"></i></a>
+			<div class="pull-right" ng-if="image.isImageCropper">
+				<a href title="@content_clickToEdit" class="picked-image media-image" ng-click="edit($index)" localize="title">
+					<i class="icon icon-settings"></i>
+				</a>
+				<a href title="@content_uploadClear" class="picked-image" ng-click="remove($index)" localize="title">
+					<i class="icon icon-delete"></i>
+				</a>
 			</div>
 
 		</li>
@@ -67,5 +68,11 @@
 			</a>
 		</li>
 	</ul>
+
+	<umb-overlay ng-if="mediaPickerOverlay.show"
+				 model="mediaPickerOverlay"
+				 position="right"
+				 view="mediaPickerOverlay.view">
+	</umb-overlay>
 
 </div>

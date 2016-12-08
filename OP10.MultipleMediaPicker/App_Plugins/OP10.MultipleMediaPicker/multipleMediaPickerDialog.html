@@ -2,24 +2,16 @@
 	<form name="multipleMediaPicker" ng-submit="submit(model)" class="multipleMediaPicker">
 		<umb-panel>
 			<div class="umb-panel-header">
-				<h1 class="headline">Edit media</h1>
+				<h1 class="headline"><localize key="edit">Edit</localize></h1>
 			</div>
 			<div class="umb-panel-body umb-scrollable with-header with-footer">
 				<umb-pane>
-					<umb-control-group label="Name" ng-if="model.changeDefaultName">
-						<input type="text" name="name" ng-model="model.name" value="model.name" required />
-					</umb-control-group>
-					<umb-control-group label="Physical name (without file extension)" ng-if="model.changePhysicalName">
-						<input type="text" name="physicalName" ng-model="model.physicalName" value="model.physicalName" ng-pattern='/^[^\\/:*?"<>|\n\t\r]*$/' required />
-					</umb-control-group>
-					<div ng-repeat="property in model.properties">
-						<umb-control-group label="{{property.label}}">
-							<input type="text" name="{{property.alias}}" value="{{property.value}}" ng-model="property.value" ng-required="property.validation.mandatory" />
-							<span class="help-block" ng-show="multipleMediaPicker[{{property.alias}}].$error.required">Required</span>
-						</umb-control-group>
-					</div>
+					<umb-property ng-repeat="property in model.properties" property="property" class="quickview-item quickview-item-{{property.view}}">
+						<umb-editor model="property"></umb-editor>
+					</umb-property>
+
 					<p>
-						Location: <a href="#media/media/edit/{{model.id}}" title="Edit in Media" ng-click="close()">{{model.path}}</a>
+						<localize key="path">Path</localize>: <a href="#media/media/edit/{{model.media.id}}" title="@defaultdialogs_linkToMedia" ng-click="close()" localize="title">{{model.path}}</a>
 					</p>
 				</umb-pane>
 			</div>

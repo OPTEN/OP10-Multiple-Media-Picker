@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<umbPackage>
+  <info>
+    <package>
+      <name>OP10 Multiple Media Picker</name>
+      <version>$ASSEMBLY_VERSION$</version>
+      <license url="https://github.com/OPTEN/OP10-Multiple-Media-Picker/blob/master/LICENSE.md">License</license>
+      <url>https://github.com/OPTEN/OP10-Multiple-Media-Picker</url>
+      <requirements>
+        <major>3</major>
+        <minor>0</minor>
+        <patch>0</patch>
+      </requirements>
+    </package>
+    <author>
+      <name>OPTEN AG: Aaron Morf</name>
+      <website>http://www.opten.ch/de/ueber-uns/team/</website>
+    </author>
+    <readme><![CDATA[OP10 Multiple Media Picker is a great extension to the normal Media Picker
+------------------------------------------------------------------------
+
+With this plugin you are allowed to change the **media name** within the content section.
+
+For SEO ranking you can also edit the **Physical Name** to change the media name on the server.
+
+If you want to use less clicks you can also enable the **quick-view** property which allows you to edit the data directly in the overview and not in the dialog.
+
+**The plugin supports also the Image Cropper!**
+
+
+Main Developer:
+-Aaron Morf
+
+Contributors:
+-Tobias Morf
+-Severin d'Heureuse
+-Calvin Frei
+-Tobias Lopez
+-Tim Pickin]]></readme>
+  </info>
+  <DocumentTypes />
+  <Templates />
+  <Stylesheets />
+  <Macros />
+  <DictionaryItems />
+  <Languages />
+  <DataTypes />
+  <files />
+</umbPackage>

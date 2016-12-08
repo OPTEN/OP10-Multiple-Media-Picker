@@ -14,6 +14,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OP10.MultipleMediaPicker.Web.UI", "test\OP10.MultipleMediaPicker.Web.UI\OP10.MultipleMediaPicker.Web.UI.csproj", "{0A9C1EFE-9EC2-41C3-A2A1-3F66FEA214AD}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{00B232E7-DA02-4046-BAE6-59A2DC923900}"
+	ProjectSection(SolutionItems) = preProject
+		build\build.cake = build\build.cake
+		build\build.ps1 = build\build.ps1
+		build\OP10.MultipleMediaPicker.nuspec = build\OP10.MultipleMediaPicker.nuspec
+		build\package.xml = build\package.xml
+		build\UmbracoPackage.proj = build\UmbracoPackage.proj
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+	<id>OP10.MultipleMediaPicker</id>
+	<version></version>
+	<title>OP10 Multiple Media Picker</title>
+	<authors>OPTEN AG</authors>
+	<owners>OPTEN AG</owners>
+	<licenseUrl>https://github.com/OPTEN/OP10-Multiple-Media-Picker/blob/master/LICENSE.md</licenseUrl>
+	<projectUrl>https://github.com/OPTEN/OP10-Multiple-Media-Picker</projectUrl>
+	<iconUrl>http://www.opten.ch/nuget/logo.png</iconUrl>
+	<requireLicenseAcceptance>false</requireLicenseAcceptance>
+	<summary>
+	  <![CDATA[OP10 Multiple Media Picker is a great extension to the normal Media Picker]]>
+	</summary>
+	<description>
+	  <![CDATA[With this plugin you are allowed to change the media name within the content section.
+
+For SEO ranking you can also edit the Physical Name to change the media name on the server.
+
+If you want to use less clicks you can also enable the quick-view property which allows you to edit the data directly in the overview and not in the dialog.
+
+The plugin supports also the Image Cropper!]]>
+	</description>
+	<tags>opten op10 umbraco</tags>
+	<dependencies></dependencies>
+  </metadata>
+  <files>
+	<file src="bin\OP10.MultipleMediaPicker.dll" target="lib\net45" />
+	<file src="App_Plugins\OP10.MultipleMediaPicker\**\*.*" target="content\App_Plugins\OP10.MultipleMediaPicker" />
+  </files>
+</package>

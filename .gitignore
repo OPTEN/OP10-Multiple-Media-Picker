@@ -25,7 +25,8 @@
 [Dd]ebug/
 [Rr]elease/
 x64/
-build/
+build/artifacts
+build/tools
 [Bb]in/
 [Oo]bj/
 
@@ -159,9 +160,3 @@ Temporary Items
 .apdisk
 
 test/
-
-
-
-
-
-

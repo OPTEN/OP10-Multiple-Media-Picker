@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Package">
+
+  <!-- IMPORTS -->
+  <PropertyGroup>
+	<MSBuildUmbracoTasksPath>$(MSBuildProjectDirectory)\MSBuild.Umbraco.Tasks</MSBuildUmbracoTasksPath>
+  </PropertyGroup>
+
+  <Import Project="$(MSBuildUmbracoTasksPath)\MSBuild.Umbraco.Tasks.Targets" />
+
+  <!-- MANIFEST UMBRACO -->
+  <Target Name="ManifestUmbraco">
+	<ItemGroup>
+	  <ManifestFiles Include="$(BuildDir)\**\*.*" Exclude="$(BuildDir)\package.xml" />
+	</ItemGroup>
+	<ManifestUpdate
+		ManifestFile="$(BuildDir)\package.xml"
+		WorkingDirectory="$(BuildDir)"
+		Files="@(ManifestFiles)" />
+  </Target>
+
+  <!-- PACKAGE -->
+  <Target Name="Package" DependsOnTargets="ManifestUmbraco">
+	<ItemGroup>
+	  <PackageFiles Include="$(BuildDir)\**\*.*" />
+	</ItemGroup>
+	<Package ManifestFile="$(BuildDir)\package.xml"
+			WorkingDirectory="$(BuildDir)"
+			OutputDirectory="$(ArtifactsDir)"
+			Files="@(PackageFiles)" />
+  </Target>
+</Project>

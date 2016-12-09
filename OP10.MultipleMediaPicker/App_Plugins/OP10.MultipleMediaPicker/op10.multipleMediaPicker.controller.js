@@ -57,7 +57,7 @@
 
 		// Save medias
 		$scope.saveImages = function () {
-			if ($scope.contentForm.$valid && $scope.model.config.selectedQuickviewProperties.length) {
+			if ($scope.contentForm.$valid && $scope.model.config.selectedQuickviewProperties && $scope.model.config.selectedQuickviewProperties.length) {
 				var imagesResponse = [];
 				_.each($scope.images, function (media) {
 					var properties = {};

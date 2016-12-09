@@ -299,7 +299,7 @@
 
 			if (defaultMedia.hasPermission) {
 				mediaResource.getById(defaultMedia.id, "Media").then(function (media) {
-					if ($scope.model.config.selectedQuickviewProperties !== undefined) {
+					if ($scope.model.config.selectedQuickviewProperties) {
 						for (var i = 0; i < $scope.model.config.selectedQuickviewProperties.length; i++) {
 							// Get propertyeditors
 							var property = getPropertyByAlias($scope.model.config.selectedQuickviewProperties[i], media);

@@ -30,7 +30,7 @@ Task("Version")
 		CreateDirectory(dest);
 	}
 
-	version = "1.1.1";
+	version = "1.1.2";
 
 	PatchAssemblyInfo("../OP10.MultipleMediaPicker/Properties/AssemblyInfo.cs", version);
 	

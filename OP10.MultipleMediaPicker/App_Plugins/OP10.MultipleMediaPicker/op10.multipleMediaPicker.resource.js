@@ -8,8 +8,7 @@
 	function multipleMediaPickerResource($http, umbRequestHelper) {
 		var resource = {
 			saveMedia: saveMedia,
-			getMediaProperties: getMediaProperties,
-			getUmbracoVersion: getUmbracoVersion
+			getMediaProperties: getMediaProperties
 		};
 
 		return resource;
@@ -30,13 +29,6 @@
 			return umbRequestHelper.resourcePromise(
                 $http.get("/umbraco/backoffice/OP10/MultipleMediaPickerApi/GetMediaProperties"),
                 "Could not get Media properties!"
-            );
-		};
-
-		function getUmbracoVersion() {
-			return umbRequestHelper.resourcePromise(
-                $http.get("/umbraco/backoffice/OP10/MultipleMediaPickerApi/GetUmbracoVersion"),
-                "Could not get Umbraco Version!"
             );
 		};
 

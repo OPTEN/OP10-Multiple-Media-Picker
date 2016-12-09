@@ -57,6 +57,12 @@
 	display: block;
 }
 
+.multipleMediaPicker .umb-sortable-thumbnails > li.media-loader {
+    margin: 20px 47px;
+    width: 40px !important;
+    height: 40px !important;
+}
+
 .multipleMediaPicker .media-image {
 	right: 48px;
 	color: #000;

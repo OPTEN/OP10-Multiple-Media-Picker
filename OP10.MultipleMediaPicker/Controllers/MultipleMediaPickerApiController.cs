@@ -128,17 +128,5 @@ namespace OP10.MultipleMediaPicker.Controllers
 			).Select(o => new { name = o.Name, alias = o.Alias }).ToArray();
 		}
 
-		/// <summary>
-		/// Returns the Umbraco Version
-		/// </summary>
-		/// <returns></returns>
-		public dynamic GetUmbracoVersion()
-		{
-			return new
-			{
-				version = ConfigurationManager.AppSettings["umbracoConfigurationStatus"]
-			};
-		}
-
 	}
 }

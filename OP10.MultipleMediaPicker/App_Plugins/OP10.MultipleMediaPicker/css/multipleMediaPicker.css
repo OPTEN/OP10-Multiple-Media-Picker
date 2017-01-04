@@ -63,16 +63,30 @@
     height: 40px !important;
 }
 
-.multipleMediaPicker .media-image {
-	right: 48px;
+.umb-mediapicker .media-icons {
+	position: absolute;
+	right: 10px;
+	bottom: 10px;
+	font-size: 24px;
+	line-height: 36px;
 	color: #000;
+	text-align: center;
 }
 
-.multipleMediaPicker .picked-image {
+.umb-mediapicker .media-icons .media-icon {
+	display: inline-block;
+	width: 32px;
+	height: 32px;
+	background-color: #fff;
+	border-radius: 50%;
 	opacity: 0.8;
 }
 
-.multipleMediaPicker .picked-image:hover {
+.umb-mediapicker .media-icons .media-icon.media-icon-remove {
+	color: red;
+}
+
+.multipleMediaPicker .media-icons .media-icon:hover {
 	opacity: 1.0;
 }
 

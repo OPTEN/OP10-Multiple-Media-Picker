@@ -18,6 +18,9 @@
 		var onlyImages = $scope.model.config.onlyImages && $scope.model.config.onlyImages !== '0' ? true : false;
 		var disableFolderSelect = $scope.model.config.disableFolderSelect && $scope.model.config.disableFolderSelect !== '0' ? true : false;
 
+		//check the pre-values for show-media-link
+		$scope.showMediaLink = $scope.model.config.showMediaLink && $scope.model.config.showMediaLink !== '0' ? true : false;
+
 		//check the pre-values for change-physical-name    
 		$scope.ImageCropperInQuickview = $scope.model.config.selectedQuickviewProperties != null && $scope.model.config.selectedQuickviewProperties.indexOf("umbracoFile") !== -1 ? true : false;
 
@@ -418,8 +421,11 @@
 			media.isFile = false;
 			media.isFolder = false;
 			media.isImageCropper = $scope.ImageCropperInQuickview;
-			if (media.metaData.ContentTypeAlias == undefined) {
+			if (media.metaData.ContentTypeAlias == undefined) {// media variable looks different when just added and not saved
 				media.metaData.ContentTypeAlias = media.contentTypeAlias;
+				if (media.image !== undefined) {
+					media.metaData.umbracoFile = { "Value": media.image };
+				}
 			}
 			if (media.metaData.ContentTypeAlias == "Folder") {
 				media.isFolder = true;
@@ -428,6 +434,14 @@
 			if (media.metaData.ContentTypeAlias == "File") {
 				media.isFile = true;
 				media.isImageCropper = false;
+			}
+			media.url = "/umbraco/#/media/media/edit/" + media.id;
+			if (media.metaData.umbracoFile !== undefined) {
+				if (media.metaData.umbracoFile.Value.src !== undefined) {
+					media.url = media.metaData.umbracoFile.Value.src;
+				} else {
+					media.url = media.metaData.umbracoFile.Value;
+				}
 			}
 		}
 

@@ -40,20 +40,27 @@
 						<small>{{image.name}}</small>
 					</span>
 				</a>
-
-				<a href title="@content_clickToEdit" class="picked-image media-image" ng-click="edit($index)" localize="title">
-					<i class="icon icon-settings"></i>
-				</a>
-				<a href title="@content_uploadClear" class="picked-image" ng-click="remove($index)" localize="title">
-					<i class="icon icon-delete"></i>
-				</a>
+				<div class="media-icons">
+					<a href title="@content_clickToEdit" class="media-icon" ng-click="edit($index)" localize="title">
+						<i class="icon icon-settings"></i>
+					</a>
+					<a href="{{image.url}}" title="@defaultdialogs_openInNewWindow" target="_blank" class="media-icon" localize="title" ng-if="showMediaLink">
+						<i class="icon icon-window-popin"></i>
+					</a>
+					<a href title="@content_uploadClear" class="media-icon media-icon-remove" ng-click="remove($index)" localize="title">
+						<i class="icon icon-delete"></i>
+					</a>
+				</div>
 			</div>
 
-			<div class="pull-right" ng-if="image.isImageCropper">
-				<a href title="@content_clickToEdit" class="picked-image media-image" ng-click="edit($index)" localize="title">
+			<div class="media-icons pull-right" ng-if="image.isImageCropper">
+				<a href title="@content_clickToEdit" class="media-icon" ng-click="edit($index)" localize="title">
 					<i class="icon icon-settings"></i>
 				</a>
-				<a href title="@content_uploadClear" class="picked-image" ng-click="remove($index)" localize="title">
+				<a href="{{image.url}}" title="@defaultdialogs_openInNewWindow" target="_blank" class="media-icon" localize="title" ng-if="showMediaLink">
+					<i class="icon icon-window-popin"></i>
+				</a>
+				<a href title="@content_uploadClear" class="media-icon media-icon-remove" ng-click="remove($index)" localize="title">
 					<i class="icon icon-delete"></i>
 				</a>
 			</div>

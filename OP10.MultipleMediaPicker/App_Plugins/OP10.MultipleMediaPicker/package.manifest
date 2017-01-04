@@ -27,6 +27,12 @@
 					"view": "boolean"
 				},
 				{
+					"label": "Link to media",
+					"description": "Shows an icon to open the media in a new tab.",
+					"key": "showMediaLink",
+					"view": "boolean"
+				},
+				{
 					"label": "Start node",
 					"description": "",
 					"key": "startNodeId",

@@ -25,9 +25,9 @@
             );
 		};
 
-		function getMediaProperties() {
+		function getMediaProperties(type) {
 			return umbRequestHelper.resourcePromise(
-                $http.get("/umbraco/backoffice/OP10/MultipleMediaPickerApi/GetMediaProperties"),
+                $http.get("/umbraco/backoffice/OP10/MultipleMediaPickerApi/GetMediaProperties?type=" + type),
                 "Could not get Media properties!"
             );
 		};

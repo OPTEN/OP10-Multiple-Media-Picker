@@ -1,21 +1,6 @@
 <div class="multipleMediaPicker umb-editor umb-mediapicker" ng-controller="OP10.Backoffice.MultipleMediaPicker.Controller">
 
-	<ul class="umb-sortable-thumbnails" ng-show="isLoading">
-		<li class="media-loader">
-			<div class="sk-circle1 sk-circle"></div>
-			<div class="sk-circle2 sk-circle"></div>
-			<div class="sk-circle3 sk-circle"></div>
-			<div class="sk-circle4 sk-circle"></div>
-			<div class="sk-circle5 sk-circle"></div>
-			<div class="sk-circle6 sk-circle"></div>
-			<div class="sk-circle7 sk-circle"></div>
-			<div class="sk-circle8 sk-circle"></div>
-			<div class="sk-circle9 sk-circle"></div>
-			<div class="sk-circle10 sk-circle"></div>
-			<div class="sk-circle11 sk-circle"></div>
-			<div class="sk-circle12 sk-circle"></div>
-		</li>
-	</ul>
+	<umb-load-indicator ng-if="isLoading"></umb-load-indicator>
 
 	<ul ui-sortable="sortableOptions" ng-model="images" class="umb-sortable-thumbnails">
 
@@ -40,20 +25,9 @@
 						<small>{{image.name}}</small>
 					</span>
 				</a>
-				<div class="media-icons">
-					<a href title="@content_clickToEdit" class="media-icon" ng-click="edit($index)" localize="title">
-						<i class="icon icon-settings"></i>
-					</a>
-					<a href="{{image.url}}" title="@defaultdialogs_openInNewWindow" target="_blank" class="media-icon" localize="title" ng-if="showMediaLink">
-						<i class="icon icon-window-popin"></i>
-					</a>
-					<a href title="@content_uploadClear" class="media-icon media-icon-remove" ng-click="remove($index)" localize="title">
-						<i class="icon icon-delete"></i>
-					</a>
-				</div>
 			</div>
 
-			<div class="media-icons pull-right" ng-if="image.isImageCropper">
+			<div class="media-icons pull-right">
 				<a href title="@content_clickToEdit" class="media-icon" ng-click="edit($index)" localize="title">
 					<i class="icon icon-settings"></i>
 				</a>

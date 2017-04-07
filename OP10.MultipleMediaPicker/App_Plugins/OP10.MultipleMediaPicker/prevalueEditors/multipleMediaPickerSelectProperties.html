@@ -1,15 +1,17 @@
-﻿<div class="multipleMediaPicker" ng-controller="OP10.Backoffice.MultipleMediaPickerSelectProperties.Controller">
-	<div class="multipleMediaPicker-prevalue" ui-sortable="sortableOptions">
-		<div class="control-group" ng-repeat="property in properties">
-			<div ng-if="property.alias == 'empty' || property.alias == 'loading'">
-				<p>{{property.name}}</p>
-			</div>
-			<div ng-if="property.alias != 'empty' && property.alias != 'loading'">
-				<i class="icon icon-navigation handle"></i>
-				<label>
-					<input type="checkbox" value="{{property.alias}}" ng-click="toggle(property.alias)" ng-checked="checked.indexOf(property.alias) > -1" />
-					{{property.name}} <small>({{property.alias}})</small>
-				</label>
+﻿<div class="multipleMediaPicker multipleMediaPicker-prevalues" ng-controller="OP10.Backoffice.MultipleMediaPickerSelectProperties.Controller">
+	<div ng-repeat="mediaType in mediaTypes">
+		<div class="multipleMediaPicker-prevalue" ui-sortable="sortableOptions">
+			<div class="control-group" ng-repeat="property in mediaType.properties" data-media-type="{{mediaType.name}}">
+				<div ng-if="mediaType.name == 'empty' || mediaType.name == 'loading'">
+					<p>{{property.name}}</p>
+				</div>
+				<div ng-if="mediaType.name != 'empty' && mediaType.name != 'loading'">
+					<i class="icon icon-navigation handle"></i>
+					<label>
+						<input type="checkbox" value="{{property.alias}}" ng-click="toggle(mediaType.name, property.alias)" ng-checked="mediaType.checked.indexOf(property.alias) > -1" />
+						{{property.name}} <small>({{mediaType.name}}_{{property.alias}})</small>
+					</label>
+				</div>
 			</div>
 		</div>
 	</div>

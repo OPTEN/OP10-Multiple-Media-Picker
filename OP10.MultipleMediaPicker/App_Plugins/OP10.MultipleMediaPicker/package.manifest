@@ -9,10 +9,16 @@
 		"prevalues": {
 			"fields": [
 				{
-					"label": "Pick multiple items",
-					"description": "",
-					"key": "multiPicker",
-					"view": "boolean"
+					"label": "Minimum",
+					"description": "Enter the minimum amount of medias to be selected. 0 or empty for unlimited",
+					"key": "minimum",
+					"view": "number"
+				},
+				{
+					"label": "Maximum",
+					"description": "Enter the maximum amount of medias to be selected. 0 or empty for unlimited",
+					"key": "maximum",
+					"view": "number"
 				},
 				{
 					"label": "Pick only images",
@@ -37,6 +43,13 @@
 					"description": "",
 					"key": "startNodeId",
 					"view": "mediapicker"
+				},
+				{
+					"label": "Allow items of type",
+					"description": "Seperate with comma",
+					"key": "allowItemsOfType",
+					"view": "textstring",
+					"value": "Image"
 				},
 				{
 					"label": "Select Properties",

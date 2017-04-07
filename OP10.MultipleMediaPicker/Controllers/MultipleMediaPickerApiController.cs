@@ -2,12 +2,14 @@
 using OP10.MultipleMediaPicker.Models;
 
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Web;
 
 using Umbraco.Core.Logging;
+using Umbraco.Core.Models;
 using Umbraco.Web.Editors;
 using Umbraco.Web.Mvc;
 using Umbraco.Web.WebApi;
@@ -35,8 +37,8 @@ namespace OP10.MultipleMediaPicker.Controllers
 				var newMedia = ms.GetById(request.Id);
 				name = newMedia.Name;
 
-				// Set new url and fileName if media is no folder
-				if (newMedia.ContentType.Alias.Equals("Folder", StringComparison.OrdinalIgnoreCase) == false)
+				// Set new url and fileName if media has umbracoFile
+				if (newMedia.HasProperty("umbracoFile"))
 				{
 					var urlValue = newMedia.GetValue<string>("umbracoFile");
 					string oldFilePathRelative = urlValue.DetectIsJson()
@@ -120,12 +122,47 @@ namespace OP10.MultipleMediaPicker.Controllers
 		/// Returns the Properties of a Image.
 		/// </summary>
 		/// <returns></returns>
-		public dynamic[] GetMediaProperties()
+		public dynamic GetMediaProperties(string type)
 		{
-			return Services.ContentTypeService.GetMediaType("Image").PropertyTypes.Where(o => 
-				o.Alias.StartsWith("umbraco") == false || 
+			if (string.IsNullOrWhiteSpace(type))
+			{
+				type = "Image";
+			}
+			var types = type.Split(',');
+			List<IMediaType> mediaTypes = new List<IMediaType>();
+			if (types != null && types.Any())
+			{
+				foreach (var item in types)
+				{
+					var mediaType = Services.ContentTypeService.GetMediaType(item.Trim());
+					if (mediaType != null)
+					{
+						mediaTypes.Add(mediaType);
+					}
+				}
+			}
+			if (mediaTypes == null || mediaTypes.Any() == false)
+			{
+				mediaTypes.Add(Services.ContentTypeService.GetMediaType("Image"));
+			}
+			List<dynamic> propertiesList = new List<dynamic>();
+			foreach (var mediaType in mediaTypes)
+			{
+				propertiesList.Add(new
+					{
+						name = mediaType.Name,
+						properties = mediaType.PropertyTypes.Where(o =>
+							o.Alias.StartsWith("umbraco") == false ||
+							(o.Alias.Equals("umbracoFile", StringComparison.OrdinalIgnoreCase) && o.PropertyEditorAlias.Equals("Umbraco.ImageCropper", StringComparison.OrdinalIgnoreCase))
+						).Select(o => new { name = o.Name, alias = o.Alias }).ToArray()
+					}
+				);
+			}
+			return propertiesList.ToArray();
+			/*return Services.ContentTypeService.GetMediaType("Image").PropertyTypes.Where(o =>
+				o.Alias.StartsWith("umbraco") == false ||
 				(o.Alias.Equals("umbracoFile", StringComparison.OrdinalIgnoreCase) && o.PropertyEditorAlias.Equals("Umbraco.ImageCropper", StringComparison.OrdinalIgnoreCase))
-			).Select(o => new { name = o.Name, alias = o.Alias }).ToArray();
+			).Select(o => new { name = o.Name, alias = o.Alias }).ToArray();*/
 		}
 
 	}

@@ -10,9 +10,27 @@
 						<umb-editor model="property"></umb-editor>
 					</umb-property>
 
-					<p>
-						<localize key="path">Path</localize>: <a href="#media/media/edit/{{model.media.id}}" title="@defaultdialogs_linkToMedia" ng-click="close()" localize="title">{{model.path}}</a>
-					</p>
+					<div class="quickview-item ng-pristine ng-valid">
+						<div class="control-group umb-control-group">
+							<div class="umb-el-wrap">
+								<label class="control-label ng-binding" for="linkToMedia" title="@defaultdialogs_linkToMedia">
+									<localize key="defaultdialogs_linkToMedia">Link to media</localize>
+								</label>
+								<div class="controls">
+									<div class="umb-property-editor ng-scope">
+										<ul class="nav nav-stacked">
+											<li>
+												<a href="#media/media/edit/{{model.media.id}}" title="@defaultdialogs_linkToMedia" ng-click="close()" localize="title">
+													<i class="icon-out"></i>
+													{{model.path}}
+												</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</umb-pane>
 			</div>
 			<div class="umb-panel-footer">

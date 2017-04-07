@@ -3,9 +3,9 @@
 
 	angular.module("umbraco").controller("OP10.Backoffice.MultipleMediaPicker.Controller", multipleMediaPickerController);
 
-	multipleMediaPickerController.$inject = ["$scope", "$q", "$timeout", "umbPropEditorHelper", "mediaHelper", "dialogService", "userService", "notificationsService", "entityResource", "mediaResource", "multipleMediaPickerResource", "fileManager"];
+	multipleMediaPickerController.$inject = ["$scope", "$q", "$timeout", "$filter", "umbPropEditorHelper", "mediaHelper", "dialogService", "userService", "notificationsService", "entityResource", "mediaResource", "multipleMediaPickerResource", "fileManager"];
 
-	function multipleMediaPickerController($scope, $q, $timeout, umbPropEditorHelper, mediaHelper, dialogService, userService, notificationsService, entityResource, mediaResource, multipleMediaPickerResource, fileManager) {
+	function multipleMediaPickerController($scope, $q, $timeout, $filter, umbPropEditorHelper, mediaHelper, dialogService, userService, notificationsService, entityResource, mediaResource, multipleMediaPickerResource, fileManager) {
 
 		// get the content item form
 		var contentForm = angular.element('form[name=contentForm]').scope();
@@ -14,15 +14,14 @@
 		}
 
 		// check the pre-values
-		var multiPicker = $scope.model.config.multiPicker && $scope.model.config.multiPicker !== '0' ? true : false;
+		var minimum = $scope.model.config.minimum ? parseInt($scope.model.config.minimum) : 0;
+		var maximum = $scope.model.config.maximum ? parseInt($scope.model.config.maximum) : 0;
+		var multiPicker = maximum == 0 || maximum > 1 ? true : false;
 		var onlyImages = $scope.model.config.onlyImages && $scope.model.config.onlyImages !== '0' ? true : false;
 		var disableFolderSelect = $scope.model.config.disableFolderSelect && $scope.model.config.disableFolderSelect !== '0' ? true : false;
 
 		//check the pre-values for show-media-link
 		$scope.showMediaLink = $scope.model.config.showMediaLink && $scope.model.config.showMediaLink !== '0' ? true : false;
-
-		//check the pre-values for change-physical-name    
-		$scope.ImageCropperInQuickview = $scope.model.config.selectedQuickviewProperties != null && $scope.model.config.selectedQuickviewProperties.indexOf("umbracoFile") !== -1 ? true : false;
 
 
 		// pre-value for start node, default content root
@@ -51,7 +50,28 @@
 		$scope.isLoading = true;
 
 		$scope.$on("formSubmitting", function () {
-			$scope.saveImages();
+			var messages = [];
+			var propertyFormScopes = $(".multipleMediaPicker").closest(".ng-scope");
+			if (propertyFormScopes.length) {
+				propertyFormScopes.each(function (index, element) {
+					var propertyFormScope = $(element).scope();
+					if (propertyFormScope.saving === undefined || propertyFormScope.saving == false) {
+						propertyFormScope.saving = true;
+						propertyFormScope.saveImages().then(function (response) {
+							messages.push(response);
+							if (messages.length == propertyFormScopes.length) {
+								renderResponseMessage(messages);
+								propertyFormScope.saving = false;
+							}
+						});
+					}
+				});
+			} else {
+				$scope.saveImages().then(function (response) {
+					messages.push(response);
+					renderResponseMessage(messages);
+				});
+			}
 		});
 		$scope.$on("formSubmitted", function () {
 			setupViewModel();
@@ -60,6 +80,7 @@
 
 		// Save medias
 		$scope.saveImages = function () {
+			var deferred = $q.defer();
 			if ($scope.contentForm.$valid && $scope.model.config.selectedQuickviewProperties && $scope.model.config.selectedQuickviewProperties.length) {
 				var imagesResponse = [];
 				_.each($scope.images, function (media) {
@@ -72,11 +93,12 @@
 					multipleMediaPickerResource.saveMedia(media.id, properties).then(function (response) {
 						imagesResponse.push(response);
 						if ($scope.images.length == imagesResponse.length) {
-							if (imagesResponse.length == 1) {
+							deferred.resolve(imagesResponse);
+							/*if (imagesResponse.length == 1) {
 								if (String(response.success).toLowerCase() === 'true') {
-									notificationsService.success("Media saved", response.message);
+									notificationsService.success("Media saved", imageResponse[0].message);
 								} else {
-									notificationsService.error("Media not saved", response.message);
+									notificationsService.error("Media not saved", imageResponse[0].message);
 								}
 							} else {
 								var totalSuccess = imagesResponse.length;
@@ -89,11 +111,13 @@
 								if (totalSuccess > 0) {
 									notificationsService.success("Medias saved", totalSuccess + " medias has been successfully saved!");
 								}
-							}
+							}*/
 						}
 					});
 				});
 			}
+
+			return deferred.promise;
 		};
 
 		// Edit media
@@ -105,17 +129,22 @@
 			}
 
 			var properties = [];
-			_.each($scope.model.config.selectedProperties, function (property) {
-				var value = "";
-				_.each($scope.images[index].quickviewProperties, function (quickviewProperty) {
-					var alias = quickviewProperty.alias;
-					alias = getDefaultAlias(alias);
-					if (alias == property) {
-						value = quickviewProperty.value;
-					}
-				});
-				properties.push({ alias: property, value: value });
-			});
+			if ($scope.model.config.selectedProperties) {
+				var mediaType = $filter('filter')($scope.model.config.selectedProperties, { name: $scope.images[index].metaData.ContentTypeAlias.toLowerCase() })[0];
+				if (mediaType) {
+					_.each(mediaType.properties, function (property) {
+						var value = "";
+						_.each($scope.images[index].quickviewProperties, function (quickviewProperty) {
+							var alias = quickviewProperty.alias;
+							alias = getDefaultAlias(alias);
+							if (alias == property) {
+								value = quickviewProperty.value;
+							}
+						});
+						properties.push({ alias: property, value: value });
+					});
+				}
+			}
 			var dialogData = { image: $scope.images[index], properties: properties };
 			dialogService.open({
 				template: '/App_Plugins/OP10.MultipleMediaPicker/multipleMediaPickerDialog.html?v=ASSEMBLY_VERSION',
@@ -157,6 +186,12 @@
 					show: true,
 					submit: function (model) {
 
+						if (multiPicker) {
+							if (maximum != 0 && model.selectedImages.length > maximum) {
+								model.selectedImages = model.selectedImages.slice(0, maximum)
+							}
+						}
+
 						_.each(model.selectedImages, function (media, i) {
 
 							addDefaultMediaProperties(media);
@@ -190,6 +225,10 @@
 						//it's only a single selector, so make it into an array
 						if (!multiPicker) {
 							data = [data];
+						} else {
+							if (maximum != 0 && data.length > maximum) {
+								data = data.slice(0, maximum);
+							}
 						}
 
 						_.each(data, function (media, i) {
@@ -246,7 +285,18 @@
 		};
 
 		$scope.showAdd = function () {
-			if (!multiPicker) {
+			if (multiPicker) {
+				if ($scope.model.value) {
+					var medias = $scope.model.value.split(",").map(function (item) {
+						return item.trim();
+					});
+					if (medias.length >= minimum && (maximum == 0 || medias.length <= maximum)) {
+						return true;
+					}
+				}
+			}
+			else
+			{
 				if ($scope.model.value && $scope.model.value !== "") {
 					return false;
 				}
@@ -303,70 +353,71 @@
 			if (defaultMedia.hasPermission) {
 				mediaResource.getById(defaultMedia.id, "Media").then(function (media) {
 					if ($scope.model.config.selectedQuickviewProperties) {
-						for (var i = 0; i < $scope.model.config.selectedQuickviewProperties.length; i++) {
-							// Get propertyeditors
-							var property = getPropertyByAlias($scope.model.config.selectedQuickviewProperties[i], media);
+						var mediaType = $filter('filter')($scope.model.config.selectedQuickviewProperties, { name: media.contentTypeAlias.toLowerCase() })[0];
+						if (mediaType) {
+							var i = 0;
+							_.each(mediaType.properties, function (quickviewProperty) {
+								// Get propertyeditors
+								var property = getPropertyByAlias(quickviewProperty, media);
 
-							// Set default propertyeditors
-							if ($scope.model.config.selectedQuickviewProperties[i] == "defaultNodeName") {
-								property = {
-									alias: $scope.model.config.selectedQuickviewProperties[i],
-									config: {},
-									description: "",
-									editor: "Umbraco.Textbox",
-									hideLabel: false,
-									id: (defaultMedia + i),
-									label: "Name",
-									validation: {
-										mandatory: true,
-										pattern: null
-									},
-									value: defaultMedia.name,
-									view: "textbox"
-								};
-							}
-							if ($scope.model.config.selectedQuickviewProperties[i] == "defaultPhysicalName" && defaultMedia.isFolder == false) {
-								var umbracoFileProperty = getPropertyByAlias("umbracoFile", media);
-								var physicalName;
-								if (umbracoFileProperty.editor == "Umbraco.ImageCropper") {
-									var fullName = umbracoFileProperty.value.src.substr((umbracoFileProperty.value.src.lastIndexOf('/') + 1), umbracoFileProperty.value.src.length);
-									physicalName = fullName.substr(0, fullName.lastIndexOf('.'));
-								} else {
-									var fullName = umbracoFileProperty.value.substr((umbracoFileProperty.value.lastIndexOf('/') + 1), umbracoFileProperty.value.length);
-									physicalName = fullName.substr(0, fullName.lastIndexOf('.'));
+								// Set default propertyeditors
+								if (quickviewProperty == "defaultNodeName") {
+									property = {
+										alias: quickviewProperty,
+										config: {},
+										description: "",
+										editor: "Umbraco.Textbox",
+										hideLabel: false,
+										id: (defaultMedia + i),
+										label: "Name",
+										validation: {
+											mandatory: true,
+											pattern: null
+										},
+										value: defaultMedia.name,
+										view: "textbox"
+									};
 								}
-								property = {
-									alias: $scope.model.config.selectedQuickviewProperties[i],
-									config: {},
-									description: "",
-									editor: "Umbraco.Textbox",
-									hideLabel: false,
-									id: (defaultMedia + i),
-									label: "Physical name (without file extension)",
-									validation: {
-										mandatory: defaultMedia.isFolder == false,
-										pattern: null
-									},
-									value: physicalName,
-									view: "textbox"
-								};
-							}
-							
-							if (property !== undefined) {
-								// Set custom propertyeditor view
-								if (property.editor == "Umbraco.ImageCropper") {
-									property.view = "/App_Plugins/OP10.MultipleMediaPicker/propertyeditors/imagecropper.html?v=ASSEMBLY_VERSION";
+								if (quickviewProperty == "defaultPhysicalName" && defaultMedia.isFolder == false) {
+									var umbracoFileProperty = getPropertyByAlias("umbracoFile", media);
+									var physicalName;
+									if (umbracoFileProperty.editor == "Umbraco.ImageCropper") {
+										var fullName = umbracoFileProperty.value.src.substr((umbracoFileProperty.value.src.lastIndexOf('/') + 1), umbracoFileProperty.value.src.length);
+										physicalName = fullName.substr(0, fullName.lastIndexOf('.'));
+									} else {
+										var fullName = umbracoFileProperty.value.substr((umbracoFileProperty.value.lastIndexOf('/') + 1), umbracoFileProperty.value.length);
+										physicalName = fullName.substr(0, fullName.lastIndexOf('.'));
+									}
+									property = {
+										alias: quickviewProperty,
+										config: {},
+										description: "",
+										editor: "Umbraco.Textbox",
+										hideLabel: false,
+										id: (defaultMedia + i),
+										label: "Physical name (without file extension)",
+										validation: {
+											mandatory: defaultMedia.isFolder == false,
+											pattern: null
+										},
+										value: physicalName,
+										view: "textbox"
+									};
 								}
 
-								// Skip propertyeditor
-								if (defaultMedia.isFile && property.alias == "umbracoFile") {
-									continue;
-								}
+								if (property !== undefined) {
+									// Set custom propertyeditor view
+									if (property.editor == "Umbraco.ImageCropper") {
+										defaultMedia.isImageCropper = true;
+										property.view = "/App_Plugins/OP10.MultipleMediaPicker/propertyeditors/imagecropper.html?v=ASSEMBLY_VERSION";
+									}
 
-								// Add property
-								property.alias = property.alias + "_id_" + defaultMedia.id;
-								properties.push(property);
-							}
+									// Add property
+									property.alias = property.alias + "_id_" + defaultMedia.id;
+									properties.push(property);
+								}
+								i++;
+							});
 						}
 					}
 
@@ -420,7 +471,6 @@
 			media.hasPermission = hasUserPermission(media.path);
 			media.isFile = false;
 			media.isFolder = false;
-			media.isImageCropper = $scope.ImageCropperInQuickview;
 			if (media.metaData.ContentTypeAlias == undefined) {// media variable looks different when just added and not saved
 				media.metaData.ContentTypeAlias = media.contentTypeAlias;
 				if (media.image !== undefined) {
@@ -429,11 +479,9 @@
 			}
 			if (media.metaData.ContentTypeAlias == "Folder") {
 				media.isFolder = true;
-				media.isImageCropper = false;
 			}
 			if (media.metaData.ContentTypeAlias == "File") {
 				media.isFile = true;
-				media.isImageCropper = false;
 			}
 			media.url = "/umbraco/#/media/media/edit/" + media.id;
 			if (media.metaData.umbracoFile !== undefined) {
@@ -441,6 +489,31 @@
 					media.url = media.metaData.umbracoFile.Value.src;
 				} else {
 					media.url = media.metaData.umbracoFile.Value;
+				}
+			}
+		}
+
+		function renderResponseMessage(messages) {
+			if (messages.length == 1) {
+				if (String(messages[0].success).toLowerCase() === 'true') {
+					notificationsService.success("Media saved", messages[0].message);
+				} else {
+					notificationsService.error("Media not saved", messages[0].message);
+				}
+			} else {
+				var totalSuccess = 0;
+				_.each(messages, function (message) {
+					_.each(message, function (imageResponse) {
+						if (String(imageResponse.success).toLowerCase() === 'false') {
+							totalSuccess--;
+							notificationsService.error("Media not saved", imageResponse.message);
+						} else {
+							totalSuccess++;
+						}
+					});
+				});
+				if (totalSuccess > 0) {
+					notificationsService.success("Medias saved", totalSuccess + " medias has been successfully saved!");
 				}
 			}
 		}
@@ -511,9 +584,9 @@
 
 	angular.module("umbraco").controller("OP10.Backoffice.MultipleMediaPickerDialog.Controller", multipleMediaPickerDialogController);
 
-	multipleMediaPickerDialogController.$inject = ["$scope", "$q", "mediaResource", "entityResource", "editorState", "mediaHelper", "contentEditingHelper"];
+	multipleMediaPickerDialogController.$inject = ["$scope", "$q", "$filter", "mediaResource", "entityResource", "editorState", "mediaHelper", "contentEditingHelper"];
 
-	function multipleMediaPickerDialogController($scope, $q, mediaResource, entityResource, editorState, mediaHelper, contentEditingHelper) {
+	function multipleMediaPickerDialogController($scope, $q, $filter, mediaResource, entityResource, editorState, mediaHelper, contentEditingHelper) {
 
 		$scope.model = {
 			media: $scope.dialogData.image,
@@ -526,14 +599,15 @@
 			var properties = [];
 
 			mediaResource.getById(mediaId, "Media").then(function (media) {
-				for (var i = 0; i < $scope.dialogData.properties.length; i++) {
+				var i = 0;
+				_.each($scope.dialogData.properties, function (dialogProperty) {
 					// Get propertyeditors
-					var property = getPropertyByAlias($scope.dialogData.properties[i].alias, media);
+					var property = getPropertyByAlias(dialogProperty.alias, media);
 
 					// Set default propertyeditors
-					if ($scope.dialogData.properties[i].alias == "defaultNodeName") {
+					if (dialogProperty.alias == "defaultNodeName") {
 						property = {
-							alias: $scope.dialogData.properties[i].alias,
+							alias: dialogProperty.alias,
 							config: {},
 							description: "",
 							editor: "Umbraco.Textbox",
@@ -548,7 +622,7 @@
 							view: "textbox"
 						};
 					}
-					if ($scope.dialogData.properties[i].alias == "defaultPhysicalName" && $scope.model.media.isFolder == false) {
+					if (dialogProperty.alias == "defaultPhysicalName" && $scope.model.media.isFolder == false) {
 						var umbracoFileProperty = getPropertyByAlias("umbracoFile", media);
 						var physicalName;
 						if (umbracoFileProperty.editor == "Umbraco.ImageCropper") {
@@ -559,7 +633,7 @@
 							physicalName = fullName.substr(0, fullName.lastIndexOf('.'));
 						}
 						property = {
-							alias: $scope.dialogData.properties[i].alias,
+							alias: dialogProperty.alias,
 							config: {},
 							description: "",
 							editor: "Umbraco.Textbox",
@@ -578,22 +652,17 @@
 					if (property !== undefined) {
 						// Set custom propertyeditor view
 						if (property.editor == "Umbraco.ImageCropper") {
-							property.view = "/App_Plugins/OP10.MultipleMediaPicker/propertyeditors/imagecropper.html?v=ASSEMBLY_VERSION";
-						}
-
-						// Skip propertyeditor
-						if ($scope.model.media.isFile && property.alias == "umbracoFile") {
-							continue;
+							property.view = "/App_Plugins/OP10.MultipleMediaPicker/propertyeditors/imagecropperDialog.html?v=ASSEMBLY_VERSION";
 						}
 
 						// Add property
 						property.alias = property.alias + "_id_" + mediaId;
-						if ($scope.dialogData.properties[i].value != "") {
-							property.value = $scope.dialogData.properties[i].value;
+						if (dialogProperty.value != "") {
+							property.value = dialogProperty.value;
 						}
 						properties.push(property);
 					}
-				}
+				});
 
 				deferred.resolve(properties);
 			});

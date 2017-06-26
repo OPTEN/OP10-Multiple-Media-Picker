@@ -2,10 +2,10 @@
 	"propertyEditors": [{ 
 		"alias": "OP10.MultipleMediaPicker",
 		"name":  "OP10 Multiple Media Picker",
-		"editor": {
-			"view": "~/App_Plugins/OP10.MultipleMediaPicker/multipleMediaPicker.html?v=ASSEMBLY_VERSION",
-			"valueType": "JSON"
-		},
+			"editor": {
+				"view": "~/App_Plugins/OP10.MultipleMediaPicker/multipleMediaPicker.html?v=ASSEMBLY_VERSION",
+				"valueType": "STRING"
+			},
 		"prevalues": {
 			"fields": [
 				{

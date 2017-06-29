@@ -290,6 +290,7 @@
   <ItemGroup>
     <Content Include="App_Plugins\OP10.MultipleMediaPicker\propertyeditors\imagecropper.html" />
     <Content Include="App_Plugins\OP10.MultipleMediaPicker\package.manifest" />
+    <Content Include="App_Plugins\OP10.MultipleMediaPicker\propertyeditors\imagecropperDialog.html" />
     <Content Include="gulpfile.js" />
     <Content Include="packages.config" />
     <None Include="Web.Debug.config">

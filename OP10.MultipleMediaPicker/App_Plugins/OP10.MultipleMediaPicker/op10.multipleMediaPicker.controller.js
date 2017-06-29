@@ -81,7 +81,7 @@
 		// Save medias
 		$scope.saveImages = function () {
 			var deferred = $q.defer();
-			if ($scope.contentForm.$valid && $scope.model.config.selectedQuickviewProperties && $scope.model.config.selectedQuickviewProperties.length) {
+			if ($scope.contentForm && $scope.contentForm.$valid && $scope.model.config.selectedQuickviewProperties && $scope.model.config.selectedQuickviewProperties.length) {
 				var imagesResponse = [];
 				_.each($scope.images, function (media) {
 					var properties = {};
@@ -494,13 +494,7 @@
 		}
 
 		function renderResponseMessage(messages) {
-			if (messages.length == 1) {
-				if (String(messages[0].success).toLowerCase() === 'true') {
-					notificationsService.success("Media saved", messages[0].message);
-				} else {
-					notificationsService.error("Media not saved", messages[0].message);
-				}
-			} else {
+			if (messages.length) {
 				var totalSuccess = 0;
 				_.each(messages, function (message) {
 					_.each(message, function (imageResponse) {

@@ -13,7 +13,7 @@
 		var preValueScopes = $("[ng-controller='Umbraco.Editors.DataType.EditController']").scope();
 		var preValueIndex = preValueScopes.preValues.map(function (e) { return e.alias; }).indexOf("allowItemsOfType");
 		$scope.allowItemsOfType = preValueScopes.preValues[preValueIndex];
-		if ($scope.allowItemsOfType.value == "") {
+		if (!$scope.allowItemsOfType.value) {
 			$scope.allowItemsOfType.value = "Image";
 		}
 

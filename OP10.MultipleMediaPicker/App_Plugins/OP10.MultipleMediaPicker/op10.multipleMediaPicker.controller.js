@@ -31,7 +31,7 @@
 		var defaultStartNodeId = $scope.model.config.startNodeId;
 		var userStartNodeId;
 		getUserStartNodeId().then(function (startMediaId) {
-			userStartNodeId = startMediaId;
+			userStartNodeId = startMediaId ? startMediaId : -1;
 			hasUserFolderPermission(userStartNodeId, defaultStartNodeId).then(function (hasPermission) {
 				if (hasPermission) {
 					$scope.model.config.startNodeId = defaultStartNodeId;

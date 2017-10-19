@@ -316,7 +316,7 @@
 			var deferred = $q.defer();
 
 			userService.getCurrentUser().then(function (userData) {
-				deferred.resolve(userData.startMediaId);
+				deferred.resolve(userData.startMediaId ? userData.startMediaId : userData.startMediaIds[0]);
 			});
 
 			return deferred.promise;

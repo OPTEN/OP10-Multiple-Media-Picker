@@ -1,4 +1,5 @@
 ﻿#addin "Cake.FileHelpers"
+#addin "Cake.Git"
 #addin "nuget:http://nuget.oss-concept.ch/nuget/?package=Opten.Cake"
 
 var target = Argument("target", "Default");
@@ -30,7 +31,7 @@ Task("Version")
 		CreateDirectory(dest);
 	}
 
-	version = "1.3.1";
+	version = GitDescribe("../", false, GitDescribeStrategy.Tags, 0);;
 
 	PatchAssemblyInfo("../OP10.MultipleMediaPicker/Properties/AssemblyInfo.cs", version);
 	

@@ -210,13 +210,20 @@ namespace OP10.MultipleMediaPicker.PropertyEditors.ValueConverters
 			{
 				var preVals = _dataTypeService.GetPreValuesCollectionByDataTypeId(id).PreValuesAsDictionary;
 
-				if (preVals.ContainsKey("multiPicker"))
+				if (preVals.ContainsKey("maximum"))
 				{
-					var preValue = preVals
-						.FirstOrDefault(x => string.Equals(x.Key, "multiPicker", StringComparison.InvariantCultureIgnoreCase))
+					var maxValue = preVals
+						.FirstOrDefault(x => string.Equals(x.Key, "maximum", StringComparison.InvariantCultureIgnoreCase))
 						.Value;
 
-					return preValue != null && preValue.Value != null && preValue.Value.Equals("1");
+					if (maxValue == null || maxValue.Value == null)
+					{
+						return true;
+					}
+
+					int i = int.TryParse(maxValue.Value, out i) ? i : -1;
+
+					return i <= 0;
 				}
 
 				return false;

@@ -17,7 +17,7 @@
 			$scope.allowItemsOfType.value = "Image";
 		}
 
-		if ($scope.model.value != null) {
+		if ($scope.model.value && $scope.model.value != null) {
 			$scope.checked = $scope.model.value;
 			removeEmptyMediaTypes();
 		}

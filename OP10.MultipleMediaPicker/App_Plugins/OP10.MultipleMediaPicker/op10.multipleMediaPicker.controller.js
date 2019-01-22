@@ -19,6 +19,7 @@
 		var multiPicker = maximum == 0 || maximum > 1 ? true : false;
 		var onlyImages = $scope.model.config.onlyImages && $scope.model.config.onlyImages !== '0' ? true : false;
 		var disableFolderSelect = $scope.model.config.disableFolderSelect && $scope.model.config.disableFolderSelect !== '0' ? true : false;
+		var allowItemsOfType = $scope.model.config.allowItemsOfType;
 
 		//check the pre-values for show-media-link
 		$scope.showMediaLink = $scope.model.config.showMediaLink && $scope.model.config.showMediaLink !== '0' ? true : false;
@@ -50,28 +51,9 @@
 		$scope.isLoading = true;
 
 		$scope.$on("formSubmitting", function () {
-			var messages = [];
-			var propertyFormScopes = $(".multipleMediaPicker").closest(".ng-scope");
-			if (propertyFormScopes.length) {
-				propertyFormScopes.each(function (index, element) {
-					var propertyFormScope = $(element).scope();
-					if (propertyFormScope.saving === undefined || propertyFormScope.saving == false) {
-						propertyFormScope.saving = true;
-						propertyFormScope.saveImages().then(function (response) {
-							messages.push(response);
-							if (messages.length == propertyFormScopes.length) {
-								renderResponseMessage(messages);
-								propertyFormScope.saving = false;
-							}
-						});
-					}
-				});
-			} else {
-				$scope.saveImages().then(function (response) {
-					messages.push(response);
-					renderResponseMessage(messages);
-				});
-			}
+			$scope.saveImages().then(function (response) {
+				renderResponseMessage(response);
+			});
 		});
 		$scope.$on("formSubmitted", function () {
 			setupViewModel();
@@ -81,7 +63,7 @@
 		// Save medias
 		$scope.saveImages = function () {
 			var deferred = $q.defer();
-			if ($scope.contentForm && $scope.contentForm.$valid && $scope.model.config.selectedQuickviewProperties && $scope.model.config.selectedQuickviewProperties.length) {
+			if ($scope.model.config.selectedQuickviewProperties && $scope.model.config.selectedQuickviewProperties.length) {
 				var imagesResponse = [];
 				_.each($scope.images, function (media) {
 					var properties = {};
@@ -195,6 +177,10 @@
 						_.each(model.selectedImages, function (media, i) {
 
 							addDefaultMediaProperties(media);
+
+							if (allowItemsOfType && allowItemsOfType.toLowerCase().indexOf(media.metaData.ContentTypeAlias.toLowerCase()) == -1) {
+								return;
+							}
 
 							getProperties(media).then(function (response) {
 								media.quickviewProperties = response.properties;
@@ -493,23 +479,12 @@
 			}
 		}
 
-		function renderResponseMessage(messages) {
-			if (messages.length) {
-				var totalSuccess = 0;
-				_.each(messages, function (message) {
-					_.each(message, function (imageResponse) {
-						if (String(imageResponse.success).toLowerCase() === 'false') {
-							totalSuccess--;
-							notificationsService.error("Media not saved", imageResponse.message);
-						} else {
-							totalSuccess++;
-						}
-					});
-				});
-				if (totalSuccess > 0) {
-					notificationsService.success("Medias saved", totalSuccess + " medias has been successfully saved!");
+		function renderResponseMessage(message) {
+			_.each(message, function (imageResponse) {
+				if (String(imageResponse.success).toLowerCase() === 'false') {
+					notificationsService.error("Media not saved", imageResponse.message);
 				}
-			}
+			});
 		}
 
 		function setupViewModel() {

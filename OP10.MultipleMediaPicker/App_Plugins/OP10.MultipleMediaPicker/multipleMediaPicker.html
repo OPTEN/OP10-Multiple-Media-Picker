@@ -20,7 +20,7 @@
 				<a href title="@content_clickToEdit" ng-click="edit($index)" localize="title">
 					<img ng-src="{{image.thumbnail}}" alt="{{image.name}}" ng-show="image.thumbnail">
 
-					<span class="icon-holder" ng-hide="image.thumbnail">
+					<span class="umb-icon-holder" ng-hide="image.thumbnail">
 						<i class="icon {{image.icon}} large"></i>
 						<small>{{image.name}}</small>
 					</span>
@@ -44,7 +44,7 @@
 
 	<ul class="umb-sortable-thumbnails" ng-if="showAdd()">
 		<li style="border: none">
-			<a href="#" class="add-link" ng-click="add()" prevent-default>
+			<a href="#" class="add-link add-link-square" ng-click="add()" prevent-default>
 				<i class="icon icon-add large"></i>
 			</a>
 		</li>

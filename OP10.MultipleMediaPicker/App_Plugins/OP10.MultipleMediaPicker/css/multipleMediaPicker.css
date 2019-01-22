@@ -54,10 +54,6 @@
 	height: auto !important;
 }
 
-.multipleMediaPicker .umb-sortable-thumbnails > li a {
-	display: block;
-}
-
 .multipleMediaPicker .umb-sortable-thumbnails > li .media-container a:hover {
 	text-decoration: none;
 }
@@ -106,7 +102,7 @@
 	width: 100%;
 }
 
-.multipleMediaPicker .media-container .icon-holder small {
+.multipleMediaPicker .media-container .umb-icon-holder small {
 	display: block;
 }
 

@@ -1,6 +1,6 @@
 ﻿#addin "Cake.FileHelpers"
 #addin "Cake.Git"
-#addin "nuget:http://nuget.oss-concept.ch/nuget/?package=Opten.Cake"
+#addin "nuget:http://6pak.opten.ch/nuget/v2-nuget?package=Opten.Cake"
 
 var target = Argument("target", "Default");
 

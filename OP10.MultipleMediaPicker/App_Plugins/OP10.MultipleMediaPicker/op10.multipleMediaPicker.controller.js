@@ -29,19 +29,12 @@
 		if (!$scope.model.config.startNodeId)
 			$scope.model.config.startNodeId = -1;
 
-		var defaultStartNodeId = $scope.model.config.startNodeId;
-		var userStartNodeId;
-		getUserStartNodeId().then(function (startMediaId) {
-			userStartNodeId = startMediaId ? startMediaId : -1;
-			hasUserFolderPermission(userStartNodeId, defaultStartNodeId).then(function (hasPermission) {
-				if (hasPermission) {
-					$scope.model.config.startNodeId = defaultStartNodeId;
-				} else {
-					$scope.model.config.startNodeId = userStartNodeId;
-				}
+		getUserStartNodeIds().then(function (startMediaId) {
+			$scope.model.config.userStartNodeIds = startMediaIds;
+			$scope.model.config.startNodeId = startMediaIds.length !== 1 ? -1 : startMediaIds[0];
+			$scope.model.config.startNodeIsVirtual = startMediaIds.length !== 1;
 
-				setupViewModel();
-			});
+			setupViewModel();
 		});
 
 		// umbraco-version
@@ -298,11 +291,11 @@
 		};
 
 		// functions
-		function getUserStartNodeId() {
+		function getUserStartNodeIds() {
 			var deferred = $q.defer();
 
 			userService.getCurrentUser().then(function (userData) {
-				deferred.resolve(userData.startMediaId ? userData.startMediaId : userData.startMediaIds[0]);
+				deferred.resolve(userData.startMediaIds);
 			});
 
 			return deferred.promise;
@@ -329,7 +322,7 @@
 		}
 
 		function hasUserPermission(path) {
-			return path.indexOf($scope.model.config.startNodeId) > -1;
+			return $scope.model.config.userStartNodeIds.some(id => path.indexOf(id) >= 0);
 		}
 
 		function getProperties(defaultMedia) {

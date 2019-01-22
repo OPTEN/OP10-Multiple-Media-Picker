@@ -29,7 +29,7 @@
 		if (!$scope.model.config.startNodeId)
 			$scope.model.config.startNodeId = -1;
 
-		getUserStartNodeIds().then(function (startMediaId) {
+		getUserStartNodeIds().then(function (startMediaIds) {
 			$scope.model.config.userStartNodeIds = startMediaIds;
 			$scope.model.config.startNodeId = startMediaIds.length !== 1 ? -1 : startMediaIds[0];
 			$scope.model.config.startNodeIsVirtual = startMediaIds.length !== 1;

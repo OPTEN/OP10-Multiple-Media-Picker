@@ -46,7 +46,7 @@
 				},
 				{
 					"label": "Allow items of type",
-					"description": "Seperate with comma",
+					"description": "Seperate with comma (First hit save to see the available properties)",
 					"key": "allowItemsOfType",
 					"view": "textstring",
 					"value": "Image"

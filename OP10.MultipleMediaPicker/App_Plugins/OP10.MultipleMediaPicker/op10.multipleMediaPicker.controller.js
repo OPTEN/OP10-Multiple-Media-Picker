@@ -301,26 +301,6 @@
 			return deferred.promise;
 		}
 
-		function hasUserFolderPermission(startFolderId, searchFolderId) {
-			var deferred = $q.defer();
-			var hasPermission = (startFolderId == searchFolderId);
-
-			entityResource.getAncestors(searchFolderId, "media").then(function (anc) {
-				for (var i = 0; i < anc.length; i++) {
-					if (anc[i].id == startFolderId) {
-						hasPermission = true;
-						break;
-					}
-				}
-				if (startFolderId == -1) {
-					hasPermission = true;
-				}
-				deferred.resolve(hasPermission);
-			});
-
-			return deferred.promise;
-		}
-
 		function hasUserPermission(path) {
 			return $scope.model.config.userStartNodeIds.some(id => path.indexOf(id) >= 0);
 		}
@@ -514,7 +494,7 @@
 
 								var position = -1;
 								for (var i = 0; i < ids.length; i++) {
-									if (ids[i] == media.id) {
+									if (ids[i] == media.id || ids[i] == media.udi) {
 										position = i;
 										break;
 									}

@@ -475,18 +475,13 @@
 				// acts differently in that it allows access if the user has access to any of the apps that
 				// might require it's use. Therefore we need to use the metatData property to get at the thumbnail
 				// value.
-
 				entityResource.getByIds(ids, "Media").then(function (medias) {
-
 					_.each(medias, function (media, i) {
-
-						addDefaultMediaProperties(media);
-
-						getProperties(media).then(function (response) {
-							media.quickviewProperties = response.properties;
-
+						if (media.parentId >= -1) {
+							addDefaultMediaProperties(media);
 							//only show non-trashed items
-							if (media.parentId >= -1) {
+							getProperties(media).then(function (response) {
+								media.quickviewProperties = response.properties;
 
 								if (!media.thumbnail) {
 									media.thumbnail = mediaHelper.resolveFileFromEntity(media, true);
@@ -503,12 +498,14 @@
 									$scope.images[position] = media;
 									$scope.ids[position] = media.id;
 								}
-							}
 
+								$scope.sync();
+								$scope.isLoading = false;
+							});
+						} else {
 							$scope.sync();
 							$scope.isLoading = false;
-						});
-
+						}
 					});
 				});
 			}

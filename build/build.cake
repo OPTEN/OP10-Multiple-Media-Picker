@@ -3,6 +3,7 @@
 #addin "nuget:http://6pak.opten.ch/nuget/v2-nuget?package=Opten.Cake"
 
 var target = Argument("target", "Default");
+var feedUrl = "https://www.nuget.org/api/v2/package";
 
 var dest = Directory("./artifacts");
 var umb = dest + Directory("_umbraco");
@@ -86,11 +87,16 @@ Task("Pack")
 	.Does(() =>
 {
 	// NuGet
-	NuGetPack("./OP10.MultipleMediaPicker.nuspec", new NuGetPackSettings {
+	/*NuGetPack("./OP10.MultipleMediaPicker.nuspec", new NuGetPackSettings {
 		Version = version,
 		BasePath = umb,
 		OutputDirectory = dest
-	});
+	});*/
+	NuGetPackWithDependencies("./OP10.MultipleMediaPicker.nuspec", new NuGetPackSettings {
+		Version = version,
+		BasePath = umb,
+		OutputDirectory = dest
+	}, feedUrl);
 
 	// Umbraco
 	MSBuild("./UmbracoPackage.proj", settings =>
@@ -115,7 +121,7 @@ Task("Deploy")
 
 	// Push the package
 	NuGetPush(package, new NuGetPushSettings {
-		Source = "https://www.nuget.org/api/v2/package",
+		Source = feedUrl,
 		ApiKey = EnvironmentVariable("NUGET_API_KEY")
 	});
 

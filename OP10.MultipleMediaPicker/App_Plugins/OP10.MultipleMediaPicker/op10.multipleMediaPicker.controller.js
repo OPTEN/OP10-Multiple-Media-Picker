@@ -20,6 +20,7 @@
 		var onlyImages = $scope.model.config.onlyImages && $scope.model.config.onlyImages !== '0' ? true : false;
 		var disableFolderSelect = $scope.model.config.disableFolderSelect && $scope.model.config.disableFolderSelect !== '0' ? true : false;
 		var allowItemsOfType = $scope.model.config.allowItemsOfType;
+		$scope.model.config.idType = "udi";
 
 		//check the pre-values for show-media-link
 		$scope.showMediaLink = $scope.model.config.showMediaLink && $scope.model.config.showMediaLink !== '0' ? true : false;
@@ -183,7 +184,11 @@
 								}
 
 								$scope.images.push(media);
-								$scope.ids.push(media.id);
+								if ($scope.model.config.idType === 'udi') {
+									$scope.ids.push(media.udi);
+								} else {
+									$scope.ids.push(media.id);
+								}
 
 								$scope.sync();
 							});
@@ -222,7 +227,11 @@
 								}
 
 								$scope.images.push(media);
-								$scope.ids.push(media.id);
+								if ($scope.model.config.idType === 'udi') {
+									$scope.ids.push(media.udi);
+								} else {
+									$scope.ids.push(media.id);
+								}
 
 								$scope.sync();
 							});
@@ -249,9 +258,8 @@
 				// watch do all the rest.
 				$timeout(function () {
 					angular.forEach($scope.images, function (value, key) {
-						r.push(value.id);
+						r.push($scope.model.config.idType === 'udi' ? value.udi : value.id);
 					});
-
 					$scope.ids = r;
 					$scope.sync();
 				}, 500, false);
@@ -496,7 +504,11 @@
 								}
 								if (position != -1) {
 									$scope.images[position] = media;
-									$scope.ids[position] = media.id;
+									if ($scope.model.config.idType === 'udi') {
+										$scope.ids[position] = media.udi;
+									} else {
+										$scope.ids[position] = media.id;
+									}
 								}
 
 								$scope.sync();

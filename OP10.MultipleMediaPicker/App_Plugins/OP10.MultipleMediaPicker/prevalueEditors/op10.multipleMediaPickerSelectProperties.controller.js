@@ -108,19 +108,21 @@
 		};
 
 		function removeEmptyMediaTypes() {
-			var allowedMediaTypes = $scope.allowItemsOfType.value.split(",").map(function (item) {
-				return item.trim();
-			});
-			var toDelete = [];
-			_.each($scope.checked, function (mediaType) {
-				if (allowedMediaTypes.indexOf(mediaType.name) == -1) {
-					toDelete.push($scope.checked.map(function (e) { return e.name; }).indexOf(mediaType.name));
-				}
-			});
-			_.each(toDelete, function (mediaTypePos) {
-				$scope.checked.splice(mediaTypePos, 1);
-			});
-			$scope.model.value = $scope.checked;
+			if ($scope.allowItemsOfType.value) {
+				var allowedMediaTypes = $scope.allowItemsOfType.value.split(",").map(function (item) {
+					return item.trim();
+				});
+				var toDelete = [];
+				_.each($scope.checked, function (mediaType) {
+					if (allowedMediaTypes.indexOf(mediaType.name) == -1) {
+						toDelete.push($scope.checked.map(function (e) { return e.name; }).indexOf(mediaType.name));
+					}
+				});
+				_.each(toDelete, function (mediaTypePos) {
+					$scope.checked.splice(mediaTypePos, 1);
+				});
+				$scope.model.value = $scope.checked;
+			}
 		}
 
 	};

@@ -484,6 +484,10 @@
 				// might require it's use. Therefore we need to use the metatData property to get at the thumbnail
 				// value.
 				entityResource.getByIds(ids, "Media").then(function (medias) {
+					if (medias.length <= 0) {
+						$scope.sync();
+						$scope.isLoading = false;
+					}
 					_.each(medias, function (media, i) {
 						if (media.parentId >= -1) {
 							addDefaultMediaProperties(media);

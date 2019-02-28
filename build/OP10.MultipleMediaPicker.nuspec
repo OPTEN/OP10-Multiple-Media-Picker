@@ -23,7 +23,9 @@ If you want to use less clicks you can also enable the quick-view property which
 The plugin supports also the Image Cropper!]]>
 	</description>
 	<tags>opten op10 umbraco</tags>
-	<dependencies></dependencies>
+	<dependencies>
+	  <dependency id="UmbracoCms.Core" version="[7.6,8)" />
+	</dependencies>
   </metadata>
   <files>
 	<file src="bin\OP10.MultipleMediaPicker.dll" target="lib\net45" />

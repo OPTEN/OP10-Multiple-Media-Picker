@@ -14,6 +14,7 @@ namespace OP10.MultipleMediaPicker.PropertyEditors.ValueConverters
 {
 
 	// Implemented like Umbraco see: https://github.com/umbraco/Umbraco-CMS/blob/92f609ff71016454f03a657608fee78b354d3ef5/src/Umbraco.Web/PropertyEditors/ValueConverters/MultipleMediaPickerPropertyConverter.cs
+	// New version with GuidUdi https://github.com/umbraco/Umbraco-CMS/blob/release-7.12.4/src/Umbraco.Web/PropertyEditors/ValueConverters/MediaPickerPropertyConverter.cs
 	public class OP10MultipleMediaPickerPropertyConverter : PropertyValueConverterBase, IPropertyValueConverterMeta
 	{
 		private readonly IDataTypeService _dataTypeService;
@@ -60,43 +61,11 @@ namespace OP10.MultipleMediaPicker.PropertyEditors.ValueConverters
 		/// </returns>
 		public override object ConvertDataToSource(PublishedPropertyType propertyType, object source, bool preview)
 		{
-			if (IsMultipleDataType(propertyType.DataTypeId, propertyType.PropertyEditorAlias))
-			{
-				var nodeIds =
-					source.ToString()
-						.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries)
-						.Select(int.Parse)
-						.ToArray();
-				return nodeIds;
-			}
-
-			var attemptConvertInt = source.TryConvertTo<int>();
-			if (attemptConvertInt.Success)
-			{
-				return attemptConvertInt.Result;
-			}
-			else
-			{
-				var nodeIds =
-				   source.ToString()
-					   .Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries)
-					   .Select(int.Parse)
-					   .ToArray();
-
-				if (nodeIds.Length > 0)
-				{
-					var error =
-						string.Format(
-							"Data type \"{0}\" is not set to allow multiple items but appears to contain multiple items, check the setting and save the data type again",
-							ApplicationContext.Current.Services.DataTypeService.GetDataTypeDefinitionById(
-								propertyType.DataTypeId).Name);
-
-					LogHelper.Warn<OP10MultipleMediaPickerPropertyConverter>(error);
-					throw new Exception(error);
-				}
-			}
-
-			return null;
+			var nodeIds = source.ToString()
+				.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries)
+				.Select(Udi.Parse)
+				.ToArray();
+			return nodeIds;
 		}
 
 		/// <summary>
@@ -121,29 +90,30 @@ namespace OP10.MultipleMediaPicker.PropertyEditors.ValueConverters
 				return null;
 			}
 
-			if (UmbracoContext.Current == null)
-			{
-				return null;
-			}
+			var udis = (Udi[])source;
+			var mediaItems = new List<IPublishedContent>();
+			if (UmbracoContext.Current == null) return source;
+			var helper = new UmbracoHelper(UmbracoContext.Current);
 
-			var umbHelper = new UmbracoHelper(UmbracoContext.Current);
-
-			if (IsMultipleDataType(propertyType.DataTypeId, propertyType.PropertyEditorAlias))
+			if (udis.Any())
 			{
-				var nodeIds = (int[])source;
-				var multiMediaPicker = Enumerable.Empty<IPublishedContent>();
-				if (nodeIds.Length > 0)
+				foreach (var udi in udis)
 				{
-					multiMediaPicker = umbHelper.TypedMedia(nodeIds).Where(x => x != null);
+					var item = helper.TypedMedia(udi);
+					if (item != null)
+						mediaItems.Add(item);
 				}
-
-				return multiMediaPicker;
+				if (IsMultipleDataType(propertyType.DataTypeId, propertyType.PropertyEditorAlias))
+				{
+					return mediaItems;
+				}
+				else
+				{
+					return mediaItems.FirstOrDefault();
+				}
 			}
 
-			// single value picker
-			var nodeId = (int)source;
-
-			return umbHelper.TypedMedia(nodeId);
+			return source;
 		}
 
 		/// <summary>

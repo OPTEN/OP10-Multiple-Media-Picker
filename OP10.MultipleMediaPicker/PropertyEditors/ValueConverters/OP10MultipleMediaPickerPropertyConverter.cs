@@ -193,7 +193,7 @@ namespace OP10.MultipleMediaPicker.PropertyEditors.ValueConverters
 
 					int i = int.TryParse(maxValue.Value, out i) ? i : -1;
 
-					return i <= 0;
+					return i <= 0 || i > 1;
 				}
 
 				return false;

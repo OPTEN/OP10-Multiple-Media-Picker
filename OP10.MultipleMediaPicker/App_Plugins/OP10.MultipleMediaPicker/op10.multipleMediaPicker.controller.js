@@ -277,9 +277,7 @@
 					var medias = $scope.model.value.split(",").map(function (item) {
 						return item.trim();
 					});
-					if (medias.length >= minimum && (maximum == 0 || medias.length <= maximum)) {
-						return true;
-					}
+					return medias.length >= minimum && (maximum == 0 || medias.length < maximum);
 				}
 			}
 			else

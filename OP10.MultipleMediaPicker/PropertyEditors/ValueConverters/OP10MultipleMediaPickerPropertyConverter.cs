@@ -63,7 +63,6 @@ namespace OP10.MultipleMediaPicker.PropertyEditors.ValueConverters
 		{
 			var nodeIds = source.ToString()
 				.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries)
-				.Select(Udi.Parse)
 				.ToArray();
 			return nodeIds;
 		}
@@ -90,18 +89,28 @@ namespace OP10.MultipleMediaPicker.PropertyEditors.ValueConverters
 				return null;
 			}
 
-			var udis = (Udi[])source;
+			var ids = (string[])source;
 			var mediaItems = new List<IPublishedContent>();
 			if (UmbracoContext.Current == null) return source;
 			var helper = new UmbracoHelper(UmbracoContext.Current);
 
-			if (udis.Any())
+			if (ids.Any())
 			{
-				foreach (var udi in udis)
+				foreach (var id in ids)
 				{
-					var item = helper.TypedMedia(udi);
+					IPublishedContent item = null;
+					if (Udi.TryParse(id, out Udi udi))
+					{
+						item = helper.TypedMedia(udi);
+					}
+					else if (int.TryParse(id, out int legacyId))
+					{
+						item = helper.TypedMedia(legacyId);
+					}
 					if (item != null)
+					{
 						mediaItems.Add(item);
+					}
 				}
 				if (IsMultipleDataType(propertyType.DataTypeId, propertyType.PropertyEditorAlias))
 				{
@@ -193,7 +202,7 @@ namespace OP10.MultipleMediaPicker.PropertyEditors.ValueConverters
 
 					int i = int.TryParse(maxValue.Value, out i) ? i : -1;
 
-					return i <= 0;
+					return i <= 0 || i > 1;
 				}
 
 				return false;
